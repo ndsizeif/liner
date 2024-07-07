@@ -1102,7 +1102,7 @@ mainLoop:
 								pos--
 								s.needRefresh = true
 							}
-						case "d": // delete word
+						case "d": // delete Word
 							if pos == len(line) {
 								s.doBeep()
 								break
@@ -1136,6 +1136,27 @@ mainLoop:
 								line = line[:pos]
 								s.needRefresh = true
 							}
+						case "c": // replace Word
+						if pos == len(line) {
+							s.doBeep()
+							break
+						}
+						// remove whitespace to the right
+						for {
+							if pos == len(line) || !unicode.IsSpace(line[pos]) {
+								break
+							}
+							line = append(line[:pos], line[pos+1:]...)
+						}
+						// remove non-whitespace to the right
+						for {
+							if pos == len(line) || unicode.IsSpace(line[pos]) {
+								break
+							}
+							line = append(line[:pos], line[pos+1:]...)
+						}
+						s.enterViInsert(p, line, pos)
+						goto mainLoop
 						case "C": // replace to end of line
 							if pos >= len(line) {
 								s.doBeep()
