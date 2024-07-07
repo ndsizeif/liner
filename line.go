@@ -211,10 +211,10 @@ func (s *State) refreshMultiLine(prompt []rune, buf []rune, pos int) error {
 	/* Write the prompt and the current buffer content */
 	s.toggleStyle() // print escape codes to style prompt based on mode
 	if _, err := fmt.Print(string(prompt)); err != nil {
-		s.setStyle(styleDefault) // print escape codes to go back to default style
+		s.setStyle(Default) // print escape codes to go back to default style
 		return err
 	}
-	s.setStyle(styleDefault)
+	s.setStyle(Default)
 	if _, err := fmt.Print(string(buf)); err != nil {
 		return err
 	}
