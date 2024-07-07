@@ -110,7 +110,7 @@ func (s *State) refreshSingleLine(prompt []rune, buf []rune, pos int) error {
 	s.cursorPos(0)
 	s.toggleStyle() // print escape codes to style prompt based on mode
 	_, err := fmt.Print(string(prompt))
-	s.setStyle(styleDefault) // print escape codes to go back to default style
+	s.setStyle(Default) // print escape codes to go back to default style
 	if err != nil {
 		return err
 	}
@@ -867,11 +867,9 @@ mainLoop:
 			default:
 				// XXX in replace mode, accept a single key, then switch to normal mode
 				if s.viMode == ViReplace {
-					var replaced []rune
-					replaced = append(replaced, line[:pos]...)
-					replaced = append(replaced, v)
-					replaced = append(replaced, line[len(replaced):]...)
-					line = replaced
+					if pos < len(line) {
+						line[pos] = v
+					}
 					s.enterViNormal(p, line, pos)
 					goto mainLoop
 				}
